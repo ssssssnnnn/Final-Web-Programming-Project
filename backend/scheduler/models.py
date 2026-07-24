@@ -70,7 +70,9 @@ class Meeting(models.Model):
 class MeetingParticipant(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
-    joined_at = models.DateTimeField(auto_now_add=True)  
+    joined_at = models.DateTimeField(auto_now_add=True)
+
+    note = modelts.TextField(blank=True, null=True, verbose_name="Notes")
 
     class Meta:
         unique_together = ('meeting', 'participant')
