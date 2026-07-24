@@ -17,7 +17,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 class MeetingSerializer(serializers.ModelSerializer):
 
     room_details = RoomSerializer(source='room', read_only=True)
-    participants = ParticipantSerializer(many=True, read_only=True)
+    participants = serializers.SerializerMethodField()
     
 
     participant_ids = serializers.PrimaryKeyRelatedField(
@@ -45,6 +45,17 @@ class MeetingSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['status']  
 
+    def get_participants(self,obj):
+        """return individual notes"""
+        mps = MeetingParticipant.objects.filter(meeting=obj)
+        return[{
+            'id' : mp.participant.id,
+            'name' :mp.participant.name,
+            'email':mp.participant.email,
+            'phone':mp.participant.phone,
+            'note':mp.note
+        }for mp in mps]
+        
     def validate(self, data):
         """Validate meeting time and room conflicts"""
         instance = self.instance
