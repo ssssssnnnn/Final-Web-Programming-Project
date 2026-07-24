@@ -363,7 +363,7 @@ export default function MeetingsView() {
             />
           </div>
 
-          {/* Meetings List */}
+            {/* Meetings List */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="p-4 bg-gray-50 border-b font-semibold text-gray-700 flex justify-between">
               <span>Scheduled Reservations</span>
@@ -371,7 +371,7 @@ export default function MeetingsView() {
                 {filteredMeetings.length} meeting{filteredMeetings.length !== 1 ? 's' : ''}
               </span>
             </div>
-            
+           
             {filteredMeetings.length === 0 ? (
               <div className="p-8 text-center text-gray-400">
                 No meetings found matching your criteria.
@@ -379,7 +379,6 @@ export default function MeetingsView() {
             ) : (
               <div className="divide-y divide-gray-100">
                 {filteredMeetings.map((meeting) => {
-                  // Handle room object vs ID
                   let roomName = 'Unknown Room';
                   if (typeof meeting.room === 'object' && meeting.room) {
                     roomName = meeting.room.name;
@@ -387,28 +386,24 @@ export default function MeetingsView() {
                     const foundRoom = rooms.find(r => String(r.id) === String(meeting.room));
                     roomName = foundRoom ? foundRoom.name : `Room ${meeting.room}`;
                   }
-                  
+                 
                   return (
-                    <div key={meeting.id} className="p-4 flex justify-between items-center hover:bg-gray-50">
-                      <div className="flex-1">
-                        <h3 className="font-bold text-gray-900 text-lg">{meeting.title}</h3>
-                        <p className="text-sm text-gray-500">
-                          📅 {new Date(meeting.date).toLocaleDateString('en-US', {
-                            weekday: 'short',
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
-                          &nbsp;|&nbsp; 🕒 {meeting.start_time.substring(0,5)} - {meeting.end_time.substring(0,5)}
-                        </p>
-                        <p className="text-xs text-blue-600 mt-1 font-medium">🏢 Room: {roomName}</p>
-                        {meeting.participants && meeting.participants.length > 0 && (
-                          <p className="text-xs text-gray-500 mt-1">
-                            👥 {meeting.participants.map(p => p.name).join(', ')}
+                    <div key={meeting.id} className="p-6 hover:bg-gray-50">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h3 className="font-bold text-gray-900 text-lg">{meeting.title}</h3>
+                          <p className="text-sm text-gray-500">
+                            📅 {new Date(meeting.date).toLocaleDateString('en-US', {
+                              weekday: 'short',
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric'
+                            })}
+                            &nbsp;|&nbsp; 🕒 {meeting.start_time.substring(0,5)} - {meeting.end_time.substring(0,5)}
                           </p>
-                        )}
-                      </div>
-                      <div className="flex items-center space-x-3 ml-4">
+                          <p className="text-xs text-blue-600 mt-1 font-medium">🏢 Room: {roomName}</p>
+                        </div>
+
                         <span className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
                           meeting.status === 'Scheduled'
                             ? 'bg-green-100 text-green-800'
@@ -418,15 +413,38 @@ export default function MeetingsView() {
                         }`}>
                           {meeting.status}
                         </span>
-                        {meeting.status === 'Scheduled' && (
-                          <button
-                            onClick={() => handleCancelMeeting(meeting.id)}
-                            className="text-xs text-red-500 border border-red-200 rounded px-3 py-1 hover:bg-red-50 transition whitespace-nowrap"
-                          >
-                            Cancel
-                          </button>
-                        )}
                       </div>
+
+                      {/* Participants with Notes */}
+                      {meeting.participants && meeting.participants.length > 0 && (
+                        <div className="mt-5">
+                          <p className="text-sm font-medium text-gray-700 mb-3">👥 Participants & Notes:</p>
+                          <div className="space-y-3">
+                            {meeting.participants.map((p, index) => (
+                              <div key={index} className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <div className="font-medium">{p.name}</div>
+                                <div className="text-xs text-gray-500">{p.email}</div>
+                                {p.note ? (
+                                  <p className="mt-3 text-sm text-gray-600 italic pl-3 border-l-2 border-blue-500">
+                                    "{p.note}"
+                                  </p>
+                                ) : (
+                                  <p className="mt-3 text-xs text-gray-400">No note added</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {meeting.status === 'Scheduled' && (
+                        <button
+                          onClick={() => handleCancelMeeting(meeting.id)}
+                          className="mt-4 text-xs text-red-500 border border-red-200 rounded px-3 py-1 hover:bg-red-50 transition whitespace-nowrap"
+                        >
+                          Cancel
+                        </button>
+                      )}
                     </div>
                   );
                 })}
