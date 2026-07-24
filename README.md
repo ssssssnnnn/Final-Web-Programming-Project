@@ -122,3 +122,84 @@
     شرح چالش: در مراحل ابتدایی، برخی فایل‌های کلیدی و رابط‌های مدیریتی پیش‌فرض (مانند ساختار مدیریت ادمین) در پوشه‌های برنامه وجود نداشتند که هماهنگی پایگاه داده را با مشکل مواجه می‌کرد.
 
     راهکار: با بررسی دقیق درخت دایرکتوری‌ها، فایل‌های مورد نیاز به صورت دستی و با رعایت دقیق الگوهای استاندارد بازنویسی و ثبت شدند که در نهایت منجر به اتصال موفق پنل مدیریت به بخش کاربری شد.
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ssssssnnnn/Final-Web-Programming-Project.git
+cd Final-Web-Programming-Project
+```
+
+### 2. Backend (Django)
+
+Navigate to the backend folder:
+
+```bash
+cd backend
+```
+
+Create a virtual environment (recommended):
+
+```bash
+python -m venv venv
+```
+
+Activate the virtual environment:
+
+```bash
+# Windows
+venv\Scripts\activate
+
+# macOS / Linux
+source venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run migrations:
+
+```bash
+python manage.py migrate
+```
+
+Create a superuser (optional, for admin panel):
+
+```bash
+python manage.py createsuperuser
+```
+
+Start the Django server:
+
+```bash
+python manage.py runserver
+```
+
+The backend will run on [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+### 3. Frontend (React + Vite)
+
+Open a new terminal and navigate to the frontend folder:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The frontend will run on [http://localhost:5173](http://localhost:5173) (Vite default).
